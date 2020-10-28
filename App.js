@@ -8,33 +8,27 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
+import GoalInput from "./components/GoalInput.js";
+import GoalItem from "./components/Goaltem.js";
 
 export default function App() {
-  const [enteredGoal, setEnteredGoal] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
 
-  const goalInputHandler = (enteredText) => {
-    setEnteredGoal(enteredText);
-  };
-
-  const addGoalHandler = () => {
+  const addGoalHandler = (goalTitle) => {
     setCourseGoals((currentGoals) => [
       ...currentGoals,
-      { key: Math.random().toString(), value: enteredGoal },
+      { key: Math.random().toString(), value: goalTitle },
     ]);
+  };
+  const removeGoalHandler = (goalId) => {
+    setCourseGoals((currentGoals) => {
+      return currentGoals.filter((goal) => goal.key != goalId);
+    });
   };
 
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Course Goal"
-          style={styles.input}
-          onChangeText={goalInputHandler}
-          value={enteredGoal}
-        />
-        <Button title="ADD" onPress={addGoalHandler} />
-      </View>
+      <GoalInput onAddGoal={addGoalHandler} />
       {/* <ScrollView>
         {courseGoals.map((goal) => (
           <View key={goal + Math.random()} style={styles.listItem}>
@@ -45,9 +39,10 @@ export default function App() {
       <FlatList
         data={courseGoals}
         renderItem={(itemData) => (
-          <View style={styles.listItem}>
-            <Text>{itemData.item.value}</Text>
-          </View>
+          <GoalItem
+            onDelete={() => removeGoalHandler(itemData.item.key)}
+            title={itemData.item.value}
+          />
         )}
       />
     </View>
@@ -68,13 +63,5 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     padding: 10,
-  },
-  listItem: {
-    padding: 10,
-    backgroundColor: "#ccc",
-    borderColor: "black",
-    borderWidth: 1,
-    // margin: 10,
-    marginVertical: 10,
   },
 });
