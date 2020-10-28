@@ -40,7 +40,8 @@ export default function App() {
         data={courseGoals}
         renderItem={(itemData) => (
           <GoalItem
-            onDelete={() => removeGoalHandler(itemData.item.key)}
+            id={itemData.item.key}
+            onDelete={removeGoalHandler}
             title={itemData.item.value}
           />
         )}
