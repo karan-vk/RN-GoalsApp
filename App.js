@@ -13,12 +13,14 @@ import GoalItem from "./components/Goaltem.js";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isAddMode, setIsAddMode] = useState(false);
 
   const addGoalHandler = (goalTitle) => {
     setCourseGoals((currentGoals) => [
       ...currentGoals,
       { key: Math.random().toString(), value: goalTitle },
     ]);
+    setIsAddMode(false);
   };
   const removeGoalHandler = (goalId) => {
     setCourseGoals((currentGoals) => {
@@ -28,14 +30,9 @@ export default function App() {
 
   return (
     <View style={styles.screen}>
-      <GoalInput onAddGoal={addGoalHandler} />
-      {/* <ScrollView>
-        {courseGoals.map((goal) => (
-          <View key={goal + Math.random()} style={styles.listItem}>
-            <Text>{goal}</Text>
-          </View>
-        ))}
-      </ScrollView> */}
+      <Button title="Add new Goal" onPress={() => setIsAddMode(true)} />
+      <GoalInput visible={isAddMode} onAddGoal={addGoalHandler} />
+
       <FlatList
         data={courseGoals}
         renderItem={(itemData) => (
@@ -52,7 +49,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 50,
+    padding: 70,
   },
   inputContainer: {
     flexDirection: "row",
